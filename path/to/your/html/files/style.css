@@ -1,0 +1,218 @@
+body {
+    height: 100%;
+    margin: 0 auto;
+}
+
+nav {
+    background-color: #9191e3;
+}
+
+nav ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+nav ul li {
+    list-style-type: none;
+}
+
+nav a  {
+}
+
+nav .logo {
+    height: 70px;
+}
+
+   
+nav a {
+    color: white;
+    text-decoration: none;
+
+}
+
+nav .rouleMaPoule {
+
+}
+
+nav .rouleMaPoule a {
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+}
+
+nav .rouleMaPoule span {
+    margin-left: 20px;
+}
+
+     
+nav .nouveauTrajet {
+    position: absolute;
+    right: 10px;
+}
+
+nav .profil {
+    position: absolute;
+    left: 10px;
+}
+
+nav svg {
+    height: 50px;
+    color: white;
+}
+
+nav .nouveauTrajet span, nav .profil span {
+    display: none
+}
+
+nav span {
+    color: white
+}
+
+/* BARRE RECHERCHE */ 
+.recherche {
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    background-color: #fff;
+    flex-direction: column;
+    display: flex;
+    align-items: stretch;
+}
+
+.recherche:hover {
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.16), 0px 2px 3px rgba(0,0,0,0.23);
+}
+
+
+.recherche input[type=text] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.recherche button {
+    width: 100%;
+    background-color: #9191e3;
+    color: white;
+    padding: 14px 20px;
+    margin: 15px 0;
+    border: none;
+    cursor: pointer;
+}
+
+.recherche button:hover {
+    background-color: #716de8;
+}
+
+#home_container{
+    background-image: url("background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 40px 0px;
+    min-height: 100vh;
+}
+
+#pagination_container{
+    font-size: 0.9rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px;
+    width: 90%;
+    margin:0 auto;
+}
+
+#pagination_container button{
+    background: none !important;
+    border: none;
+    font-size: 0.9rem;
+    color: white;
+}
+
+.hidden{
+    visibility: hidden !important;
+}
+
+
+/* DESKTOP */ 
+@media screen and (min-width: 850px) {
+       section, .maxWidth {
+            max-width: 1920px;
+            margin: auto;
+        }
+
+        nav {
+            font-family: cursive
+        }
+        nav span  {
+    display: block
+        }
+
+        nav .rouleMaPoule {
+            position: relative;
+            left: calc(50% - 100px);
+        }
+     
+        nav .nouveauTrajet {
+            width: 10%;
+            margin-right: 10%;
+        }
+        nav .profil {
+            width: 10%;
+            margin-left: 10%;
+        }
+        nav ul {
+            justify-content: flex-start;
+        }
+        nav li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        nav svg {
+            height: 30px;
+        }
+    
+      /* SCROLLBAR */
+    ::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgb(1 11 38 / 33%);
+        background-image: radial-gradient(white, #7a82d9;);
+        border-radius: 15px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #7a82d9;
+    }
+
+    .recherche {
+        width: 100%;
+    max-width: 900px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .recherche input[type=text] {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .recherche button {
+        width: auto;
+        margin: 0 0 15px
+    }
+
+}

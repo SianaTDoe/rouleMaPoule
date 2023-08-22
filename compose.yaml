@@ -1,0 +1,38 @@
+version: '3.8'
+
+services :
+  mysql:
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: user
+      MYSQL_DATABASE: rouleMaPouleDb
+    ports:
+      - "3307:3306"
+  roulemapoule:
+    image: roulemapoule
+    container_name: roule-ma-poule
+    build:
+      context: ../RouleMaPoule
+      dockerfile: dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: user
+    depends_on:
+      - mysql
+  apache:
+    image: httpd:latest
+    container_name: apache-server
+    ports:
+      - "80:80"
+    volumes:
+      - ./path/to/your/html/files:/usr/local/apache2/htdocs
+
+volumes:
+  db_data: {}

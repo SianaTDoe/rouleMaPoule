@@ -1,0 +1,73 @@
+/* CSS Mobile-first */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.search-results {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-card {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    display: flex;
+    flex-direction: column;
+}
+
+.result-card:hover {
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.16), 0px 2px 3px rgba(0,0,0,0.23);
+}
+
+.result-card h2 {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.result-card p {
+    margin-bottom: 10px;
+}
+
+.result-card button {
+    width: 100%;
+    background-color: #9191e3;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.result-card button:hover {
+    background-color: #716de8;
+}
+
+/* CSS for larger screens */
+@media (min-width: 768px) {
+    .search-results {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .result-card {
+        width: 70%;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .result-card .info, .result-card .action {
+        width: 45%;
+    }
+
+    .result-card button {
+        width: auto;
+    }
+}

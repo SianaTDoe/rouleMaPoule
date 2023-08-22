@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <link href="modal.css" rel="stylesheet">
+    <link href="nouveauTrajet.css" rel="stylesheet">
+    <link href="resultatRecherche.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+
+
+   <nav>
+    <ul>
+       <li class="profil">
+            <a href="profil.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><g><circle cx="7" cy="5.5" r="2.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></circle><path d="M2.73,11.9a5,5,0,0,1,8.54,0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="7" cy="7" r="6.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></circle></g></svg><span>Profil</span></a></li>
+      
+            <li class="rouleMaPoule"><a href="index.html"><img class="logo" src="logo.png"><span>Roule Ma Poule</span></a></li>
+        <li id="myBtn" class="nouveauTrajet">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><g><circle cx="7" cy="7" r="6.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></circle><g><line x1="7" y1="4" x2="7" y2="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></line><line x1="4" y1="7" x2="10" y2="7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></line></g></g>
+            </svg>
+            <span>Nouveau trajet</span>
+        </li>
+        </ul>
+   </nav>
+
+   <div id="home_container">
+       <section class="recherche">
+           <input type="text" placeholder="Point de départ" name="depart">
+           <input type="text" placeholder="Point d'arrivée" name="arrivee">
+           <button type="submit" onclick="findRides()">Rechercher</button>
+       </section>
+
+       <div id="rides-container" class="search-results"></div>
+
+       <div id="pagination_container" class="hidden">
+           <button onclick="previousRides()">Trajets précédents</button>
+           <span id="indicator"></span>
+           <button onclick="nextRides()">Trajets suivants</button>
+       </div>
+   </div>
+
+
+   <!-- The Modal -->
+   <div id="myModal" class="modal">
+
+       <!-- Modal content -->
+       <div class="modal-content">
+           <span class="close">&times;</span>
+           <form id="add_ride_form" class="formulaire" onsubmit="return false">
+               <input type="text" placeholder="Point de départ" name="ville_depart" required>
+               <input type="text" placeholder="Point d'arrivée" name="ville_arrivee" required>
+               <input type="text" placeholder="Date de départ" name="date_depart" required>
+               <input type="text" placeholder="Heure de départ" name="heure_depart" required>
+               <input type="number" placeholder="Places disponibles" name="nombre_places" min="1" required>
+               <input type="number" placeholder="Prix par place" name="prix_place" min="1" required>
+               <input class="description" type="text" placeholder="Description" name="trajet_description" required>
+               <button type="submit" onclick="addRide()">Ajouter un trajet</button>
+           </form>
+       </div>
+
+   </div>
+
+   <div id="modalDetail" class="modal">
+       <div class="modal-content">
+           <span class="closeModal">&times;</span>
+           <div class="details">
+               <div class="colonne-essentielle">
+                   <div class="detail">
+                       <h2>Ville de départ</h2>
+                       <p>Paris</p>
+                   </div>
+                   <div class="detail">
+                       <h2>Ville d'arrivée</h2>
+                       <p>Lyon</p>
+                   </div>
+                   <div class="detail">
+                       <h2>Date et heure de départ</h2>
+                       <p>12 Juillet 2023, 08:00</p>
+                   </div>
+                   <div class="detail">
+                       <h2>Date et heure d'arrivée</h2>
+                       <p>12 Juillet 2023, 12:00</p>
+                   </div>
+               </div>
+               <div class="colonne-complementaire">
+                   <div class="detail">
+                       <h2>Description</h2>
+                       <p>Trajet agréable avec pauses café</p>
+                   </div>
+                   <div class="detail">
+                       <h2>Autres données</h2>
+                       <p>Fumeur : Non, Musique : Oui</p>
+                   </div>
+                   <button type="button">Réserver ce trajet</button>
+               </div>
+           </div>
+       </div>
+   </div>
+
+
+
+
+
+</body>
+<script src="script.js"></script>
+<script src="scripts/requestData.js"></script>
+<script src="scripts/ridesPaginator.js"></script>
+<script src="scripts/modal.js"></script>
+<script>
+
+    let rides = []
+    const maxItems = 5
+    let currentIndex = 1
+    let maxRides = null
+
+    let users = []
+
+
+    window.onload = () => {
+        requestUsers().then(data => {
+            console.log("users",data)
+            users = data
+            if(data.length === 0){
+                console.log("run fake user")
+                insertFakeUsers().then(response => {
+                    requestUsers().then(data => {
+                        users = data
+                        insertFakeData()
+                    })
+                })
+            }
+        })
+
+
+        getRides().then(data => {
+            if(data.length > 0){
+                rides = data
+                maxRides = Math.ceil(rides.length / 5)
+                setRides()
+                document.getElementById("pagination_container").classList.remove("hidden")
+                togglePaginationBtn()
+            } else {
+                generateNoRideCard()
+            }
+        }).catch(error => {
+            console.log(error)
+            generateNoRideCard()
+        })
+    }
+
+    function generateNoRideCard(){
+        let cardElement = document.createElement("div")
+        cardElement.classList.add("result-card")
+        cardElement.innerText = " Oh non... Nous n'avons aucune poulette voyageuse pour ce trajet !"
+        document.getElementById("rides-container").innerHTML = ""
+        document.getElementById("rides-container").appendChild(cardElement)
+    }
+    function addRide(){
+        let depart = document.getElementsByName("ville_depart")[0].value
+        let arrivee = document.getElementsByName("ville_arrivee")[0].value
+        let date = document.getElementsByName("date_depart")[0].value
+        let heure = document.getElementsByName("heure_depart")[0].value
+        let places = document.getElementsByName("nombre_places")[0].value
+        let prix = document.getElementsByName("prix_place")[0].value
+        let description = document.getElementsByName("trajet_description")[0].value
+
+
+
+        if(depart && arrivee && date && places > 0 && description && heure && prix > 0){
+            let ride = {
+                villeDepart: depart,
+                villeArrivee: arrivee,
+                date: date,
+                heureDepart: heure,
+                description: description,
+                places: places,
+                prix: prix,
+                complet: false,
+                conducteurId: users[0]
+            }
+
+            insertRide(ride)
+            location.reload()
+        }
+
+    }
+    function findRides(){
+        let start = document.querySelectorAll("#home_container input")[0].value
+        let end = document.querySelectorAll("#home_container input")[1].value
+        let response = requestRidesFromCities(start, end)
+        response.then(data => {
+            rides = data
+            maxRides = Math.ceil(rides.length / 5)
+            currentIndex = 1
+            if(rides.length > 0) {
+                setRides()
+                document.getElementById("pagination_container").classList.remove("hidden")
+                togglePaginationBtn()
+            } else {
+                document.getElementById("pagination_container").classList.add("hidden")
+                generateNoRideCard()
+            }
+        })
+
+    }
+
+
+    function bookingARide(rideId){
+        console.log(rideId)
+        let booking = {
+            rideId: rideId
+        }
+        bookingRideForUser(booking)
+        location.reload()
+    }
+
+
+</script>
+</html>
